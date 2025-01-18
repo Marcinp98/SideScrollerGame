@@ -13,5 +13,11 @@ UCLASS()
 class SIDESCROLLERGAME_API AMainCharacter : public ACharacterBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AMainCharacter();
+	virtual void Jump() override;
+protected:
+	virtual void BeginPlay() override;
+
 };
