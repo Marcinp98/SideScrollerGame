@@ -1,15 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Character/EnemyBase.h"
-
+#include "Player/MainPlayerState.h"
 #include "AbilitySystem/MainAbilitySystemComponent.h"
 #include "AbilitySystem/MainAttributeSet.h"
 
-AEnemyBase::AEnemyBase()
+AMainPlayerState::AMainPlayerState()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UMainAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 
 	AttributeSet = CreateDefaultSubobject<UMainAttributeSet>("AttributeSet");
+
+	NetUpdateFrequency = 100.f;
+}
+
+UAbilitySystemComponent* AMainPlayerState::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }

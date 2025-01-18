@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/CharacterBase.h"
-#include "EnemyBase.generated.h"
+#include "AttributeSet.h"
+#include "MainAttributeSet.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SIDESCROLLERGAME_API AEnemyBase : public ACharacterBase
+class SIDESCROLLERGAME_API UMainAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
-public:
-	AEnemyBase();
+	
 };
