@@ -15,4 +15,7 @@ class SIDESCROLLERGAME_API AEnemyBase : public ACharacterBase
 	GENERATED_BODY()
 public:
 	AEnemyBase();
+
+protected:
+	virtual void BeginPlay() override;
 };

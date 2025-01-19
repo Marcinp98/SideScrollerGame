@@ -16,8 +16,12 @@ class SIDESCROLLERGAME_API AMainCharacter : public ACharacterBase
 
 public:
 	AMainCharacter();
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 	virtual void Jump() override;
 protected:
 	virtual void BeginPlay() override;
 
+private:
+	void InitAbilityActorInfo();
 };
