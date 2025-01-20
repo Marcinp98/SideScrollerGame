@@ -6,11 +6,11 @@
 
 UMainAttributeSet::UMainAttributeSet()
 {
-	InitHealth(50.f);
+	InitHealth(20.f);
 	InitMaxHealth(50.f);
-	InitMana(20.f);
+	InitMana(10.f);
 	InitMaxMana(20.f);
-	InitStamina(100.f);
+	InitStamina(80.f);
 	InitMaxStamina(100.f);
 }
 
