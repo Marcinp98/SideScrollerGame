@@ -4,6 +4,7 @@
 #include "Player/MainPlayerState.h"
 #include "AbilitySystem/MainAbilitySystemComponent.h"
 #include "AbilitySystem/MainAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AMainPlayerState::AMainPlayerState()
 {

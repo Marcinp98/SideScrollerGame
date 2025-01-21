@@ -2,6 +2,8 @@
 
 
 #include "Character/CharacterBase.h"
+#include "AbilitySystemComponent.h"
+#include "AbilitySystem/MainAbilitySystemComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -22,5 +24,9 @@ void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ACharacterBase::InitAbilityActorInfo()
+{
 }
 

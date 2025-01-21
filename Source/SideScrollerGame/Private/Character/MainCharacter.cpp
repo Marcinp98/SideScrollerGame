@@ -42,7 +42,7 @@ void AMainCharacter::Jump()
 
 void AMainCharacter::InitAbilityActorInfo()
 {
-    AMainPlayerState* MainPlayerState = GetPlayerState<AMainPlayerState>();
+    TObjectPtr<AMainPlayerState> MainPlayerState = GetPlayerState<AMainPlayerState>();
     check(MainPlayerState);
     MainPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(MainPlayerState, this);
     AbilitySystemComponent = MainPlayerState->GetAbilitySystemComponent();
