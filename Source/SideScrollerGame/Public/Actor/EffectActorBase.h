@@ -1,74 +1,87 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameplayEffectTypes.h"
+#include "GameplayEffect.h"
 #include "EffectActorBase.generated.h"
 
-class UGameplayEffect;
+
 class UAbilitySystemComponent;
 
 UENUM(BlueprintType)
-enum class EEffectApplicationPolicy : uint8
+enum class EApplyPolicy : uint8
 {
-	ApplyOnOverlap,
-	ApplyOnEndOverlap,
-	DoNotApply
+	DoNotApply,
+	ApplyOnBeginOverlap,
+	ApplyOnEndOverlap
 };
 
 UENUM(BlueprintType)
-enum class EEffectRemovalPolicy : uint8
+enum class ERemovalPolicy : uint8
 {
-	RemoveOnEndOverlap,
-	DoNotRemove
+	DoNotRemove,
+	RemoveOnEndOverlap
+};
+
+USTRUCT(BlueprintType)
+struct FAppliesGameplayEffect
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, Category = "AppliesEffect")
+	TSubclassOf<UGameplayEffect> FXClass = UGameplayEffect::StaticClass();
+
+	UPROPERTY(EditAnywhere, Category = "AppliesEffect")
+	EApplyPolicy ApplyPolicy = EApplyPolicy::DoNotApply;
+
+	UPROPERTY(EditAnywhere, Category = "AppliesEffect")
+	ERemovalPolicy RemovalPolicy = ERemovalPolicy::DoNotRemove;
+
+	bool operator==(const FAppliesGameplayEffect& Other) const
+	{
+		return FXClass == Other.FXClass && ApplyPolicy == Other.ApplyPolicy && RemovalPolicy == Other.RemovalPolicy;
+	}
+};
+
+struct FActiveEffectHandle
+{
+	FActiveEffectHandle(const FAppliesGameplayEffect& InEffect, FActiveGameplayEffectHandle InHandle)
+		: AppliedEffect(InEffect), Handle(InHandle) {}
+
+	const FAppliesGameplayEffect AppliedEffect;
+	FActiveGameplayEffectHandle Handle;
+
+	bool operator==(const FActiveEffectHandle& Other) const
+	{
+		return Handle == Other.Handle && AppliedEffect == Other.AppliedEffect;
+	}
 };
 
 UCLASS()
 class SIDESCROLLERGAME_API AEffectActorBase : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	AEffectActorBase();
 
+public:
+	AEffectActorBase();
 
 protected:
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable)
-	void ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameplayEffect")
+	bool bDestroyAfterApplyingEffect = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameplayEffect")
+	TArray<FAppliesGameplayEffect> AppliesGameplayEffects;
+
+	TMultiMap<UAbilitySystemComponent*, FActiveEffectHandle> ActiveEffectHandles;
+
+	void ApplyGameplayEffect(UAbilitySystemComponent* TargetAbility, const FAppliesGameplayEffect& Effect, bool& bApplied);
 
 	UFUNCTION(BlueprintCallable)
-	void OnOverlap(AActor* TargetActor);
+	void OnEffectBeginOverlap(AActor* TargetActor);
 
 	UFUNCTION(BlueprintCallable)
-	void OnEndOverlap(AActor* TargetActor);
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	bool bDestroyOnEffectRemoval = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	EEffectApplicationPolicy InstantEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	EEffectApplicationPolicy DurationEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> InfiniteGameplayEffectClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	EEffectApplicationPolicy InfiniteEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	EEffectRemovalPolicy InfiniteEffectRemovalPolicy = EEffectRemovalPolicy::RemoveOnEndOverlap;
-
-	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
+	void OnEffectEndOverlap(AActor* TargetActor);
 };

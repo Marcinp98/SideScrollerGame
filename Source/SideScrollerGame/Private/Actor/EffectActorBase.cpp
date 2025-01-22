@@ -1,15 +1,13 @@
- // Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "Actor/EffectActorBase.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystemInterface.h"
+#include "GameplayEffect.h"
 
 AEffectActorBase::AEffectActorBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("SceneRoot"));
 }
 
@@ -18,72 +16,71 @@ void AEffectActorBase::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AEffectActorBase::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
+void AEffectActorBase::ApplyGameplayEffect(UAbilitySystemComponent* TargetAbility, const FAppliesGameplayEffect& Effect, bool& bApplied)
 {
-	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
-	if (TargetASC == nullptr) return;
+	if (!TargetAbility || !Effect.FXClass) return;
 
-	check(GameplayEffectClass);
-	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
-	EffectContextHandle.AddSourceObject(this);
-	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass, 1.f, EffectContextHandle);
-	const FActiveGameplayEffectHandle ActiveEffectHandle= TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+	FGameplayEffectContextHandle CtxHandle = TargetAbility->MakeEffectContext();
+	CtxHandle.AddSourceObject(this);
 
-	const bool bIsInfinite = EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
-	if (bIsInfinite && InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
+	FGameplayEffectSpecHandle EffectSpec = TargetAbility->MakeOutgoingSpec(Effect.FXClass, 1.f, CtxHandle);
+	if (!EffectSpec.IsValid()) return;
+
+	FActiveGameplayEffectHandle ActiveEffectHandle = TargetAbility->ApplyGameplayEffectSpecToSelf(*EffectSpec.Data.Get());
+
+	const bool bIsInfinite = EffectSpec.Data->Def->DurationPolicy == EGameplayEffectDurationType::Infinite;
+	if (bIsInfinite && Effect.RemovalPolicy == ERemovalPolicy::RemoveOnEndOverlap)
 	{
-		ActiveEffectHandles.Add(ActiveEffectHandle, TargetASC);
+		ActiveEffectHandles.Add(TargetAbility, FActiveEffectHandle(Effect, ActiveEffectHandle));
+	}
+
+	bApplied = true;
+}
+
+void AEffectActorBase::OnEffectBeginOverlap(AActor* TargetActor)
+{
+	IAbilitySystemInterface* AbilityInterface = Cast<IAbilitySystemInterface>(TargetActor);
+	if (!AbilityInterface) return;
+
+	UAbilitySystemComponent* TargetAbility = AbilityInterface->GetAbilitySystemComponent();
+	if (!TargetAbility) return;
+
+	bool bApplied = false;
+
+	for (const auto& Effect : AppliesGameplayEffects)
+	{
+		if (Effect.ApplyPolicy != EApplyPolicy::ApplyOnBeginOverlap) continue;
+
+		ApplyGameplayEffect(TargetAbility, Effect, bApplied);
+	}
+
+	if (bDestroyAfterApplyingEffect && bApplied)
+	{
+		Destroy();
 	}
 }
 
-void AEffectActorBase::OnOverlap(AActor* TargetActor)
+void AEffectActorBase::OnEffectEndOverlap(AActor* TargetActor)
 {
-	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+	IAbilitySystemInterface* AbilityInterface = Cast<IAbilitySystemInterface>(TargetActor);
+	if (!AbilityInterface) return;
+
+	UAbilitySystemComponent* TargetAbility = AbilityInterface->GetAbilitySystemComponent();
+	if (!TargetAbility) return;
+
+	TArray<FActiveEffectHandle> ToRemove;
+	ActiveEffectHandles.MultiFind(TargetAbility, ToRemove);
+
+	for (const auto& ActiveEffect : ToRemove)
 	{
-		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		if (ActiveEffect.AppliedEffect.RemovalPolicy != ERemovalPolicy::RemoveOnEndOverlap) continue;
+
+		TargetAbility->RemoveActiveGameplayEffect(ActiveEffect.Handle, 1);
+		ActiveEffectHandles.Remove(TargetAbility, ActiveEffect);
 	}
-	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+
+	if (bDestroyAfterApplyingEffect && ToRemove.Num() > 0)
 	{
-		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
-	}
-	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
-	{
-		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		Destroy();
 	}
 }
-
-void AEffectActorBase::OnEndOverlap(AActor* TargetActor)
-{
-	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
-	{
-		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
-	}
-	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
-	{
-		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
-	}
-	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
-	{
-		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
-	}
-	if (InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
-	{
-		UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
-		if (!IsValid(TargetASC)) return;
-
-		TArray<FActiveGameplayEffectHandle> HandlesToRemove;
-		for (auto HandlePair : ActiveEffectHandles)
-		{
-			if (TargetASC == HandlePair.Value)
-			{
-				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key, 1);
-				HandlesToRemove.Add(HandlePair.Key);
-			}
-		}
-		for (auto& Handle : HandlesToRemove)
-		{
-			ActiveEffectHandles.FindAndRemoveChecked(Handle);
-		}
-	}
-}
-
