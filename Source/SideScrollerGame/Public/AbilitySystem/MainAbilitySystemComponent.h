@@ -6,6 +6,8 @@
 #include "AbilitySystemComponent.h"
 #include "MainAbilitySystemComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer&) /* ,AssetTags); */
+
 /**
  * 
  */
@@ -15,6 +17,7 @@ class SIDESCROLLERGAME_API UMainAbilitySystemComponent : public UAbilitySystemCo
 	GENERATED_BODY()
 public:
 	void AbilityActorInfoSet();
+	FEffectAssetTags EffectAssetTags;
 
 protected:
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
