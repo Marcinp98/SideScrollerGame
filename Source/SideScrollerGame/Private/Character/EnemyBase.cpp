@@ -19,5 +19,12 @@ void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
 	check(AbilitySystemComponent);
+
+	InitAbilityActorInfo();
+}
+
+void AEnemyBase::InitAbilityActorInfo()
+{
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UMainAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }

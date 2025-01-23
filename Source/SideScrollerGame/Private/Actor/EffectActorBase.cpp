@@ -23,7 +23,7 @@ void AEffectActorBase::ApplyGameplayEffect(UAbilitySystemComponent* TargetAbilit
 	FGameplayEffectContextHandle CtxHandle = TargetAbility->MakeEffectContext();
 	CtxHandle.AddSourceObject(this);
 
-	FGameplayEffectSpecHandle EffectSpec = TargetAbility->MakeOutgoingSpec(Effect.FXClass, 1.f, CtxHandle);
+	FGameplayEffectSpecHandle EffectSpec = TargetAbility->MakeOutgoingSpec(Effect.FXClass, ActorLevel, CtxHandle);
 	if (!EffectSpec.IsValid()) return;
 
 	FActiveGameplayEffectHandle ActiveEffectHandle = TargetAbility->ApplyGameplayEffectSpecToSelf(*EffectSpec.Data.Get());

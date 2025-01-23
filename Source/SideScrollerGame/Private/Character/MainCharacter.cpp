@@ -4,6 +4,7 @@
 #include "Character/MainCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/MainAbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/MainPlayerState.h"
 #include "Player/MainPlayerController.h"
@@ -45,6 +46,7 @@ void AMainCharacter::InitAbilityActorInfo()
     TObjectPtr<AMainPlayerState> MainPlayerState = GetPlayerState<AMainPlayerState>();
     check(MainPlayerState);
     MainPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(MainPlayerState, this);
+    Cast<UMainAbilitySystemComponent>(MainPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
     AbilitySystemComponent = MainPlayerState->GetAbilitySystemComponent();
     AttributeSet = MainPlayerState->GetAttributeSet();
 
