@@ -28,9 +28,9 @@ public:
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
 
 	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
-
-protected:
-
+	
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+	void OnToggleAttributeMenu();
 private:
 
 	UPROPERTY(EditAnywhere)

@@ -19,11 +19,10 @@ class SIDESCROLLERGAME_API AMainPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	AMainPlayerController();
-
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
-	
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputMappingContext> MainContext;
@@ -34,6 +33,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> JumpAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> ToggleInventoryAction;
+
 	void Move(const FInputActionValue& InputActionValue);
 	void Jump(const FInputActionValue& InputActionValue);
+
+	void ToggleInventory(const FInputActionValue& InputActionValue);
 };

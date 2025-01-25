@@ -6,6 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Character/MainCharacter.h"
+#include "UI/HUD/MainHUD.h"
 
 AMainPlayerController::AMainPlayerController()
 {
@@ -30,6 +31,7 @@ void AMainPlayerController::SetupInputComponent()
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Move);
     EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Jump);
+    EnhancedInputComponent->BindAction(ToggleInventoryAction, ETriggerEvent::Triggered, this, &AMainPlayerController::ToggleInventory);
 }
 
 void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -57,5 +59,16 @@ void AMainPlayerController::Jump(const FInputActionValue& InputActionValue)
     if (AMainCharacter* ControlledCharacter = Cast<AMainCharacter>(ControlledPawn))
     {
         ControlledCharacter->Jump();
+    }
+}
+
+void AMainPlayerController::ToggleInventory(const FInputActionValue& InputActionValue)
+{
+    if (IsLocalController())
+    {
+        if (AMainHUD* MainHUD = Cast<AMainHUD>(GetHUD()))
+        {
+            MainHUD->OnToggleAttributeMenu();
+        }
     }
 }
