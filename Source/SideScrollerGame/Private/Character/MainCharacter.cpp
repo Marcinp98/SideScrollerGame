@@ -41,6 +41,13 @@ void AMainCharacter::Jump()
     Super::Jump();
 }
 
+int32 AMainCharacter::GetPlayerLevel()
+{
+    const TObjectPtr<AMainPlayerState> MainPlayerState = GetPlayerState<AMainPlayerState>();
+    check(MainPlayerState);
+    return MainPlayerState->GetPlayerLevel();
+}
+
 void AMainCharacter::InitAbilityActorInfo()
 {
     TObjectPtr<AMainPlayerState> MainPlayerState = GetPlayerState<AMainPlayerState>();
@@ -57,5 +64,5 @@ void AMainCharacter::InitAbilityActorInfo()
             MainHUD->InitOverlay(MainPlayerController, MainPlayerState, AbilitySystemComponent, AttributeSet);
         }
     }
-    InitializePrimaryAttributes();
+    InitializeDefaultAttributes();
 }

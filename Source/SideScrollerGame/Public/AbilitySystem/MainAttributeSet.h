@@ -99,7 +99,21 @@ public:
 	* Secondary Attributes
 	*/
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_PhysicalDamage, Category = "Secondary Attributes")
+	FGameplayAttributeData PhysicalDamage;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, PhysicalDamage);
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MagicDamage, Category = "Secondary Attributes")
+	FGameplayAttributeData MagicDamage;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, MagicDamage);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_AttackSpeed, Category = "Secondary Attributes")
+	FGameplayAttributeData AttackSpeed;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, AttackSpeed);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Armor, Category = "Secondary Attributes")
+	FGameplayAttributeData Armor;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, Armor);
 
 	/*
 	* Vital Attributes
@@ -167,6 +181,18 @@ public:
 
 	UFUNCTION()
 	void OnRep_Luck(const FGameplayAttributeData& OldLuck) const;
+
+	UFUNCTION()
+	void OnRep_PhysicalDamage(const FGameplayAttributeData& OldPhysicalDamage) const;
+
+	UFUNCTION()
+	void OnRep_MagicDamage(const FGameplayAttributeData& OldMagicDamage) const;
+
+	UFUNCTION()
+	void OnRep_AttackSpeed(const FGameplayAttributeData& OldAttackSpeed) const;
+
+	UFUNCTION()
+	void OnRep_Armor(const FGameplayAttributeData& OldArmor) const;
 
 private:
 

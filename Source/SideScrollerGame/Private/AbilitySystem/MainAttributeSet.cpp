@@ -9,12 +9,6 @@
 
 UMainAttributeSet::UMainAttributeSet()
 {
-	InitHealth(20.f);
-	InitMaxHealth(50.f);
-	InitMana(10.f);
-	InitMaxMana(20.f);
-	InitStamina(80.f);
-	InitMaxStamina(100.f);
 }
 
 void UMainAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -28,6 +22,11 @@ void UMainAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Agility, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Wisdom, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Luck, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, PhysicalDamage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, MagicDamage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, AttackSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Armor, COND_None, REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
@@ -173,5 +172,25 @@ void UMainAttributeSet::OnRep_Wisdom(const FGameplayAttributeData& OldWisdom) co
 void UMainAttributeSet::OnRep_Luck(const FGameplayAttributeData& OldLuck) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, Luck, OldLuck);
+}
+
+void UMainAttributeSet::OnRep_PhysicalDamage(const FGameplayAttributeData& OldPhysicalDamage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, PhysicalDamage, OldPhysicalDamage);
+}
+
+void UMainAttributeSet::OnRep_MagicDamage(const FGameplayAttributeData& OldMagicDamage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, MagicDamage, OldMagicDamage);
+}
+
+void UMainAttributeSet::OnRep_AttackSpeed(const FGameplayAttributeData& OldAttackSpeed) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, AttackSpeed, OldAttackSpeed);
+}
+
+void UMainAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, Armor, OldArmor);
 }
 

@@ -17,7 +17,19 @@ AMainPlayerState::AMainPlayerState()
 	NetUpdateFrequency = 100.f;
 }
 
+void AMainPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMainPlayerState, Level);
+}
+
 UAbilitySystemComponent* AMainPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AMainPlayerState::OnRep_Level(int32 OldLevel)
+{
+
 }

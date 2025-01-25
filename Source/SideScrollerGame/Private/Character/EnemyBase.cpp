@@ -15,6 +15,11 @@ AEnemyBase::AEnemyBase()
 	AttributeSet = CreateDefaultSubobject<UMainAttributeSet>("AttributeSet");
 }
 
+int32 AEnemyBase::GetPlayerLevel()
+{
+	return Level;
+}
+
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
