@@ -45,3 +45,12 @@ void ACharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
 }
+
+void ACharacterBase::AddCharacterAbilities()
+{
+	UMainAbilitySystemComponent* MainASC = CastChecked<UMainAbilitySystemComponent>(AbilitySystemComponent);
+	if (!HasAuthority()) return;
+
+	MainASC->AddCharacterAbilities(StartupAbilities);
+
+}
