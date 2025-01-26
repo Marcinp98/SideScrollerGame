@@ -8,16 +8,33 @@
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
+	check(AttributeInfo);
+	for (const auto& Info : AttributeInfo->AttributeInformation)
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Info.AttributeGetter).AddLambda(
+			[this, &Info](const FOnAttributeChangeData& Data)
+			{
+				BroadcastAttributeInfo(Info);
+			}
+		);
+	}
 
 }
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
-	UMainAttributeSet* AS = CastChecked<UMainAttributeSet>(AttributeSet);
-	
+	//the DataAsset
 	check(AttributeInfo);
 
-	FMainAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(FMainGameplayTags::Get().Attributes_Primary_Strength);
-	Info.AttributeValue = AS->GetStrength();
-	AttributeInfoDelegate.Broadcast(Info);
+	for (const auto& Info : AttributeInfo.Get()->AttributeInformation)
+	{
+		BroadcastAttributeInfo(Info);
+	}
+}
+
+void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FMainAttributeInfo& Info) const
+{
+	FMainAttributeInfo NewInfo = Info;
+	NewInfo.AttributeValue = Info.AttributeGetter.GetNumericValue(AttributeSet);
+	AttributeInfoDelegate.Broadcast(NewInfo);
 }

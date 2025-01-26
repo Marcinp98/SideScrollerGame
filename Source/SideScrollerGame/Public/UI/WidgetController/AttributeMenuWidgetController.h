@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UI/WidgetController/MainWidgetController.h"
+#include "GameplayTagContainer.h"
 #include "AttributeMenuWidgetController.generated.h"
 
 struct FMainAttributeInfo;
@@ -29,4 +30,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfo;
+
+private:
+	void BroadcastAttributeInfo(const FMainAttributeInfo& Info) const;
 };

@@ -6,9 +6,11 @@
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "MainGameplayTags.h"
 
 UMainAttributeSet::UMainAttributeSet()
 {
+
 }
 
 void UMainAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

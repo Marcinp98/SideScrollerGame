@@ -22,7 +22,7 @@ public:
 	FGameplayTag Attributes_Primary_Strength;
 	FGameplayTag Attributes_Primary_Intelligence;
 	FGameplayTag Attributes_Primary_Dexterity;
-	FGameplayTag Attributes_Primary_Endurance;
+	FGameplayTag Attributes_Primary_Vitality;
 	FGameplayTag Attributes_Primary_Wisdom;
 	FGameplayTag Attributes_Primary_Agility;
 	FGameplayTag Attributes_Primary_Luck;
