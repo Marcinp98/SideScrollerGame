@@ -3,8 +3,10 @@
 
 #include "Player/MainPlayerController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "Input/MainInputComponent.h"
+#include "AbilitySystem/MainAbilitySystemComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
 #include "Character/MainCharacter.h"
 #include "UI/HUD/MainHUD.h"
 
@@ -12,6 +14,33 @@ AMainPlayerController::AMainPlayerController()
 {
 	bReplicates = true;
 }
+
+void AMainPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+    
+}
+
+void AMainPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+    if (GetASC() == nullptr) return;
+    GetASC()->AbilityInputTagReleased(InputTag);
+}
+
+void AMainPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+    if (GetASC() == nullptr) return;
+    GetASC()->AbilityInputTagHeld(InputTag);
+}
+
+UMainAbilitySystemComponent* AMainPlayerController::GetASC()
+{
+    if (MainAbilitySystemComponent == nullptr)
+    {
+        MainAbilitySystemComponent = Cast<UMainAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+    }
+    return MainAbilitySystemComponent;
+}
+
 
 void AMainPlayerController::BeginPlay()
 {
@@ -28,10 +57,11 @@ void AMainPlayerController::BeginPlay()
 void AMainPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Move);
-    EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Jump);
-    EnhancedInputComponent->BindAction(ToggleInventoryAction, ETriggerEvent::Triggered, this, &AMainPlayerController::ToggleInventory);
+	UMainInputComponent* MainInputComponent = CastChecked<UMainInputComponent>(InputComponent);
+    MainInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Move);
+    MainInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Jump);
+    MainInputComponent->BindAction(ToggleInventoryAction, ETriggerEvent::Triggered, this, &AMainPlayerController::ToggleInventory);
+    MainInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -72,3 +102,4 @@ void AMainPlayerController::ToggleInventory(const FInputActionValue& InputAction
         }
     }
 }
+

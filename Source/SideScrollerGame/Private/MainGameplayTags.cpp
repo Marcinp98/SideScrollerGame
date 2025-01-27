@@ -30,4 +30,16 @@ void FMainGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Attributes_Secondary_MaxMana = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.MaxMana"), FString("MaxMana"));
 	GameplayTags.Attributes_Secondary_Stamina = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.Stamina"), FString("Stamina"));
 	GameplayTags.Attributes_Secondary_MaxStamina = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.MaxStamina"), FString("MaxStamina"));
+
+	/* Input Attributes */
+
+	GameplayTags.InputTag_Move_Left = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Move.Left"), FString("Input Tag for Move Left"));
+	GameplayTags.InputTag_Move_Right = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Move.Right"), FString("Input Tag for Move Right"));
+	GameplayTags.InputTag_Up = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Up"), FString("Input Tag for Move Up"));
+	GameplayTags.InputTag_Down = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Down"), FString("Input Tag for Move Down"));
+	GameplayTags.InputTag_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Attack"), FString("Input Tag for Attack"));
+	GameplayTags.InputTag_Jump = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Jump"), FString("Input Tag for Jump"));
+	GameplayTags.InputTag_Interaction = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Interaction"), FString("Input Tag for Interaction"));
+	GameplayTags.InputTag_Spell1 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Spell1"), FString("Input Tag for Spellslot1"));
+	GameplayTags.InputTag_Spell2 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Spell2"), FString("Input Tag for Spellslot2"));
 }

@@ -40,7 +40,16 @@ public:
 	FGameplayTag Attributes_Secondary_Stamina;
 	FGameplayTag Attributes_Secondary_MaxStamina;
 
-protected:
+	FGameplayTag InputTag_Move_Left;
+	FGameplayTag InputTag_Move_Right;
+	FGameplayTag InputTag_Up;
+	FGameplayTag InputTag_Down;
+	FGameplayTag InputTag_Jump;
+	FGameplayTag InputTag_Attack;
+	FGameplayTag InputTag_Interaction;
+	FGameplayTag InputTag_Spell1;
+	FGameplayTag InputTag_Spell2;
+
 
 private:
 	static FMainGameplayTags GameplayTags;

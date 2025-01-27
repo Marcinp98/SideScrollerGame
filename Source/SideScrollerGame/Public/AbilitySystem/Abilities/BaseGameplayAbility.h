@@ -14,4 +14,8 @@ class SIDESCROLLERGAME_API UBaseGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 	
+public:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	FGameplayTag StartupInputTag;
 };

@@ -4,11 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GameplayTagContainer.h"
 #include "MainPlayerController.generated.h"
 
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class UMainInputConfig;
+class UMainAbilitySystemComponent;
 
 /**
  * 
@@ -40,4 +43,16 @@ private:
 	void Jump(const FInputActionValue& InputActionValue);
 
 	void ToggleInventory(const FInputActionValue& InputActionValue);
+
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UMainInputConfig> InputConfig;
+
+	UPROPERTY()
+	TObjectPtr<UMainAbilitySystemComponent> MainAbilitySystemComponent;
+
+	UMainAbilitySystemComponent* GetASC();
 };
