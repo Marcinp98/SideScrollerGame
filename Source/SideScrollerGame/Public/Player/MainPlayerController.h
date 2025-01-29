@@ -31,16 +31,7 @@ private:
 	TObjectPtr<UInputMappingContext> MainContext;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputAction> MoveAction;
-
-	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputAction> JumpAction;
-
-	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> ToggleInventoryAction;
-
-	void Move(const FInputActionValue& InputActionValue);
-	void Jump(const FInputActionValue& InputActionValue);
 
 	void ToggleInventory(const FInputActionValue& InputActionValue);
 

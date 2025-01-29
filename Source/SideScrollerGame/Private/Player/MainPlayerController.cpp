@@ -17,7 +17,8 @@ AMainPlayerController::AMainPlayerController()
 
 void AMainPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-    
+    if (GetASC() == nullptr) return;
+    GetASC()->AbilityInputTagPressed(InputTag);
 }
 
 void AMainPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
@@ -58,39 +59,10 @@ void AMainPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	UMainInputComponent* MainInputComponent = CastChecked<UMainInputComponent>(InputComponent);
-    MainInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Move);
-    MainInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Jump);
     MainInputComponent->BindAction(ToggleInventoryAction, ETriggerEvent::Triggered, this, &AMainPlayerController::ToggleInventory);
     MainInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
-void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
-{
-    const float InputValue = InputActionValue.Get<float>();
-
-    if (InputValue != 0.f) // Poruszamy siê
-    {
-        if (APawn* ControlledPawn = GetPawn<APawn>())
-        {
-            const FVector MoveDirection = FVector(1.f, 0.f, 0.f); // Ruch wzd³u¿ osi X
-            ControlledPawn->AddMovementInput(MoveDirection, InputValue);
-
-            // Obrót postaci w kierunku ruchu
-            FRotator NewRotation = FRotator(0.f, InputValue > 0.f ? 0.f : 180.f, 0.f);
-            ControlledPawn->SetActorRotation(NewRotation);
-        }
-    }
-}
-
-void AMainPlayerController::Jump(const FInputActionValue& InputActionValue)
-{
-    APawn* ControlledPawn = GetPawn();
-
-    if (AMainCharacter* ControlledCharacter = Cast<AMainCharacter>(ControlledPawn))
-    {
-        ControlledCharacter->Jump();
-    }
-}
 
 void AMainPlayerController::ToggleInventory(const FInputActionValue& InputActionValue)
 {
