@@ -9,18 +9,24 @@ void UBaseProjectileAbility::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	const bool bIsServer =  (HasAuthority(&ActivationInfo));
+	
+}
+
+void UBaseProjectileAbility::SpawnProjectile()
+{
+	const bool bIsServer = (GetAvatarActorFromActorInfo()->HasAuthority());
 	if (!bIsServer) return;
 
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 	if (CombatInterface)
 	{
-		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
-		
+		//const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
+		const FVector SocketLocation = CombatInterface->GetHandSocketLocation();
+		const FRotator ActorRotation = GetAvatarActorFromActorInfo()->GetActorRotation();
+
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
-
-		//TODO Set the projectile rotation
+		SpawnTransform.SetRotation(ActorRotation.Quaternion());
 
 		ABaseProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABaseProjectile>(
 			ProjectileClass,

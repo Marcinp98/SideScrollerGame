@@ -36,6 +36,11 @@ FVector ACharacterBase::GetCombatSocketLocation()
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
 }
 
+FVector ACharacterBase::GetHandSocketLocation()
+{
+	return GetMesh()->GetSocketLocation(HandSocket);
+}
+
 void ACharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level) const
 {
 	check(IsValid(GetAbilitySystemComponent()));
