@@ -50,6 +50,8 @@ public:
 	FGameplayTag InputTag_Spell1;
 	FGameplayTag InputTag_Spell2;
 
+	FGameplayTag Damage;
+	FGameplayTag Effects_HitReact;
 
 private:
 	static FMainGameplayTags GameplayTags;

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Abilities/BaseGameplayAbility.h"
+#include "AbilitySystem/Abilities/BaseDamageGameplayAbility.h"
 #include "BaseProjectileAbility.generated.h"
 
 class ABaseProjectile;
@@ -13,7 +13,7 @@ class UGameplayEffect;
  * 
  */
 UCLASS()
-class SIDESCROLLERGAME_API UBaseProjectileAbility : public UBaseGameplayAbility
+class SIDESCROLLERGAME_API UBaseProjectileAbility : public UBaseDamageGameplayAbility
 {
 	GENERATED_BODY()
 	

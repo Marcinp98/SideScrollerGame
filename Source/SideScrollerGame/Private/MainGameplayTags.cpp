@@ -42,4 +42,7 @@ void FMainGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.InputTag_Interaction = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Interaction"), FString("Input Tag for Interaction"));
 	GameplayTags.InputTag_Spell1 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Spell1"), FString("Input Tag for Spellslot1"));
 	GameplayTags.InputTag_Spell2 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Spell2"), FString("Input Tag for Spellslot2"));
+
+	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage"), FString("Damage"));
+	GameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Effects.HitReact"), FString("Tag granted when Hit Reacting"));
 }
