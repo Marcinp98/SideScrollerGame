@@ -6,6 +6,7 @@
 #include "SideScrollerGame/SideScrollerGame.h"
 #include "AbilitySystem/MainAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -20,6 +21,9 @@ ACharacterBase::ACharacterBase()
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	GetCharacterMovement()->bConstrainToPlane = true;
+	GetCharacterMovement()->SetPlaneConstraintAxisSetting(EPlaneConstraintAxisSetting::Y);
 }
 
 UAbilitySystemComponent* ACharacterBase::GetAbilitySystemComponent() const

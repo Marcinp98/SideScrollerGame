@@ -3,6 +3,7 @@
 
 #include "Character/EnemyBase.h"
 
+#include "AbilitySystem/MainAbilitySystemLibrary.h"
 #include "AbilitySystem/MainAbilitySystemComponent.h"
 #include "AbilitySystem/MainAttributeSet.h"
 #include "Components/WidgetComponent.h"
@@ -62,4 +63,9 @@ void AEnemyBase::InitAbilityActorInfo()
 	Cast<UMainAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
 	InitializeDefaultAttributes();
+}
+
+void AEnemyBase::InitializeDefaultAttributes() const
+{
+	UMainAbilitySystemLibrary::InitializeDefaultAttributes(this, CharacterClass, Level, AbilitySystemComponent);
 }
