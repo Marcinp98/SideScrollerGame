@@ -8,6 +8,8 @@
 #include "AbilitySystem/MainAttributeSet.h"
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/MainUserWidget.h"
+#include "MainGameplayTags.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AEnemyBase::AEnemyBase()
 {
@@ -26,10 +28,18 @@ int32 AEnemyBase::GetPlayerLevel()
 	return Level;
 }
 
+void AEnemyBase::Die()
+{
+	SetLifeSpan(LifeSpan);
+	Super::Die();
+}
+
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
+	UMainAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
 	
 	if (UMainUserWidget* MainUserWidget = Cast<UMainUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
@@ -50,11 +60,21 @@ void AEnemyBase::BeginPlay()
 				OnMaxHealthChanged.Broadcast(Data.NewValue);
 			}
 		);
+		AbilitySystemComponent->RegisterGameplayTagEvent(FMainGameplayTags::Get().Effects_HitReact, EGameplayTagEventType::NewOrRemoved).AddUObject(
+			this,
+			&AEnemyBase::HitReactTagChanged
+		);
 
 		OnHealthChanged.Broadcast(MainAS->GetHealth());
 		OnMaxHealthChanged.Broadcast(MainAS->GetMaxHealth());
 
 	}
+}
+
+void AEnemyBase::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
 }
 
 void AEnemyBase::InitAbilityActorInfo()
