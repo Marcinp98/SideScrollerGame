@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "MainPlayerController.generated.h"
 
+class UDamageTextComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
@@ -22,6 +23,9 @@ class SIDESCROLLERGAME_API AMainPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	AMainPlayerController();
+
+	UFUNCTION(Client, Reliable)
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -46,4 +50,7 @@ private:
 	TObjectPtr<UMainAbilitySystemComponent> MainAbilitySystemComponent;
 
 	UMainAbilitySystemComponent* GetASC();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 };

@@ -9,6 +9,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "Character/MainCharacter.h"
 #include "UI/HUD/MainHUD.h"
+#include "GameFramework/Character.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 AMainPlayerController::AMainPlayerController()
 {
@@ -61,6 +63,18 @@ void AMainPlayerController::SetupInputComponent()
 	UMainInputComponent* MainInputComponent = CastChecked<UMainInputComponent>(InputComponent);
     MainInputComponent->BindAction(ToggleInventoryAction, ETriggerEvent::Triggered, this, &AMainPlayerController::ToggleInventory);
     MainInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
+}
+
+void AMainPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+{
+    if (IsValid(TargetCharacter) && DamageTextComponentClass)
+    {
+        UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+        DamageText->RegisterComponent();
+        DamageText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+        DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+        DamageText->SetDamageText(DamageAmount);
+    }
 }
 
 
