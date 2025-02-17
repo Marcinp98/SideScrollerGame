@@ -10,6 +10,7 @@
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/MainPlayerController.h"
+#include "AbilitySystem/MainAbilitySystemLibrary.h"
 
 UMainAttributeSet::UMainAttributeSet()
 {
@@ -136,12 +137,14 @@ void UMainAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				TagContainer.AddTag(FMainGameplayTags::Get().Effects_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
-			ShowFloatingText(Props, LocalIncomingDamage);
+
+			const bool bCriticalHit = UMainAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+			ShowFloatingText(Props, LocalIncomingDamage, bCriticalHit);
 		}
 	}
 }
 
-void UMainAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+void UMainAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bCriticalHit) const
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{

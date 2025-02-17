@@ -5,6 +5,8 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/MainAttributeSet.h"
 #include "MainGameplayTags.h"
+#include "MainAbilityTypes.h"
+#include "AbilitySystem/MainAbilitySystemLibrary.h"
 
 struct MainDamageStatics
 {
@@ -65,6 +67,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	const float EffectiveCriticalHitChance = SourceCriticalHitChance;
 	const bool bCriticalHit = FMath::RandRange(1, 100) < EffectiveCriticalHitChance;
+
+	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+	UMainAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bCriticalHit);
 
 	Damage = bCriticalHit ? 2.f * Damage : Damage;
 

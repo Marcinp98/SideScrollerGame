@@ -36,4 +36,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MainAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, Category = "MainAbilitySystemLibrary|GameplayEffects")
+	static bool IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintCallable, Category = "MainAbilitySystemLibrary|GameplayEffects")
+	static void SetIsCriticalHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsCriticalHit);
 };

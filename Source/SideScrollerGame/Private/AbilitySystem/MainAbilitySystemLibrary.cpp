@@ -8,6 +8,7 @@
 #include "UI/HUD/MainHUD.h"
 #include "Game/MainGameModeBase.h"
 #include "AbilitySystemComponent.h"
+#include "MainAbilityTypes.h"
 
 UOverlayWidgetController* UMainAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
 {
@@ -79,4 +80,21 @@ UCharacterClassInfo* UMainAbilitySystemLibrary::GetCharacterClassInfo(const UObj
     AMainGameModeBase* MainGameMode = Cast<AMainGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
     if (MainGameMode == nullptr) return nullptr;
     return MainGameMode->CharacterClassInfo;
+}
+
+bool UMainAbilitySystemLibrary::IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+    if (const FMainGameplayEffectContext* MainEffectContext = static_cast<const FMainGameplayEffectContext*>(EffectContextHandle.Get()))
+    {
+        return MainEffectContext->IsCriticalHit();
+    }
+    return false;
+}
+
+void UMainAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsCriticalHit)
+{
+    if (FMainGameplayEffectContext* MainEffectContext = static_cast<FMainGameplayEffectContext*>(EffectContextHandle.Get()))
+    {
+        MainEffectContext->SetIsCriticalHit(bInIsCriticalHit);
+    }
 }
