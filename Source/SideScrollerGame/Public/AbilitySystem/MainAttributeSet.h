@@ -124,6 +124,46 @@ public:
 	ATTRIBUTE_ACCESSORS(UMainAttributeSet, Armor);
 
 	/*
+	* Resistance Attributes
+	*/
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_FireResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData FireResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, FireResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_LightningResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData LightningResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, LightningResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ColdResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData ColdResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, ColdResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ArcaneResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData ArcaneResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, ArcaneResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_HolyResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData HolyResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, HolyResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_DarknessResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData DarknessResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, DarknessResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_SlashResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData SlashResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, SlashResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_PierceResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData PierceResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, PierceResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_BluntResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData BluntResistance;
+	ATTRIBUTE_ACCESSORS(UMainAttributeSet, BluntResistance);
+
+	/*
 	* Vital Attributes
 	*/
 
@@ -210,6 +250,33 @@ public:
 
 	UFUNCTION()
 	void OnRep_Armor(const FGameplayAttributeData& OldArmor) const;
+
+	UFUNCTION()
+	void OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const;
+
+	UFUNCTION()
+	void OnRep_LightningResistance(const FGameplayAttributeData& OldLightningResistance) const;
+
+	UFUNCTION()
+	void OnRep_ColdResistance(const FGameplayAttributeData& OldColdResistance) const;
+
+	UFUNCTION()
+	void OnRep_ArcaneResistance(const FGameplayAttributeData& OldArcaneResistance) const;
+
+	UFUNCTION()
+	void OnRep_HolyResistance(const FGameplayAttributeData& OldHolyResistance) const;
+
+	UFUNCTION()
+	void OnRep_DarknessResistance(const FGameplayAttributeData& OldDarknessResistance) const;
+
+	UFUNCTION()
+	void OnRep_SlashResistance(const FGameplayAttributeData& OldSlashResistance) const;
+
+	UFUNCTION()
+	void OnRep_PierceResistance(const FGameplayAttributeData& OldPierceResistance) const;
+
+	UFUNCTION()
+	void OnRep_BluntResistance(const FGameplayAttributeData& OldBluntResistance) const;
 
 private:
 

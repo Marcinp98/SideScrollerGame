@@ -13,8 +13,11 @@ UCLASS()
 class SIDESCROLLERGAME_API UBaseDamageGameplayAbility : public UBaseGameplayAbility
 {
 	GENERATED_BODY()
-	
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
-	FScalableFloat Damage;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	TMap<FGameplayTag, FScalableFloat> DamageTypes;
 };

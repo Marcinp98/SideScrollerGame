@@ -31,6 +31,18 @@ void FMainGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Attributes_Secondary_Stamina = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.Stamina"), FString("Stamina"));
 	GameplayTags.Attributes_Secondary_MaxStamina = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.MaxStamina"), FString("MaxStamina"));
 
+	/* Resistances */
+
+	GameplayTags.Attributes_Resistance_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Fire"), FString("Resistance to Fire damage"));
+	GameplayTags.Attributes_Resistance_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Lightning"), FString("Resistance to Lightning damage"));
+	GameplayTags.Attributes_Resistance_Cold = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Cold"), FString("Resistance to Cold damage"));
+	GameplayTags.Attributes_Resistance_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Arcane"), FString("Resistance to Arcane damage"));
+	GameplayTags.Attributes_Resistance_Holy = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Holy"), FString("Resistance to Holy damage"));
+	GameplayTags.Attributes_Resistance_Darkness = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Darkness"), FString("Resistance to Darkness damage"));
+	GameplayTags.Attributes_Resistance_Slash = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Slash"), FString("Resistance to Slash damage"));
+	GameplayTags.Attributes_Resistance_Pierce = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Pierce"), FString("Resistance to Pierce damage"));
+	GameplayTags.Attributes_Resistance_Blunt = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes_Resistance_Blunt"), FString("Resistance to Blunt damage"));
+
 	/* Input Attributes */
 
 	GameplayTags.InputTag_Move_Left = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Move.Left"), FString("Input Tag for Move Left"));
@@ -43,6 +55,31 @@ void FMainGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.InputTag_Spell1 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Spell1"), FString("Input Tag for Spellslot1"));
 	GameplayTags.InputTag_Spell2 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("InputTag.Spell2"), FString("Input Tag for Spellslot2"));
 
+	/* Damage Types */
+	
 	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage"), FString("Damage"));
+	GameplayTags.Damage_Element_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Element.Fire"), FString("Fire Damage Type"));
+	GameplayTags.Damage_Element_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Element.Lightning"), FString("Lightning Damage Type"));
+	GameplayTags.Damage_Element_Cold = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Element.Cold"), FString("Cold Damage Type"));
+	GameplayTags.Damage_Element_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Element.Arcane"), FString("Arcane Damage Type"));
+	GameplayTags.Damage_Element_Holy = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Element.Holy"), FString("Holy Damage Type"));
+	GameplayTags.Damage_Element_Darkness = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Element.Darkness"), FString("Dark Damage Type"));
+	GameplayTags.Damage_Physical_Slash = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Physical.Slash"), FString("Slash Damage Type"));
+	GameplayTags.Damage_Physical_Pierce = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Physical.Pierce"), FString("Pierce Damage Type"));
+	GameplayTags.Damage_Physical_Blunt = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage.Physical.Blunt"), FString("Blunt Damage Type"));
+
+	/* Map of Damage Types to Resistances */
+
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Element_Arcane, GameplayTags.Attributes_Resistance_Arcane);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Element_Fire, GameplayTags.Attributes_Resistance_Fire);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Element_Lightning, GameplayTags.Attributes_Resistance_Lightning);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Element_Cold, GameplayTags.Attributes_Resistance_Cold);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Element_Holy, GameplayTags.Attributes_Resistance_Holy);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Element_Darkness, GameplayTags.Attributes_Resistance_Darkness);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Physical_Slash, GameplayTags.Attributes_Resistance_Slash);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Physical_Pierce, GameplayTags.Attributes_Resistance_Pierce);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Physical_Blunt, GameplayTags.Attributes_Resistance_Blunt);
+
+
 	GameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Effects.HitReact"), FString("Tag granted when Hit Reacting"));
 }

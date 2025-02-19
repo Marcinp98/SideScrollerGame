@@ -40,6 +40,16 @@ public:
 	FGameplayTag Attributes_Secondary_Stamina;
 	FGameplayTag Attributes_Secondary_MaxStamina;
 
+	FGameplayTag Attributes_Resistance_Fire;
+	FGameplayTag Attributes_Resistance_Lightning;
+	FGameplayTag Attributes_Resistance_Cold;
+	FGameplayTag Attributes_Resistance_Arcane;
+	FGameplayTag Attributes_Resistance_Darkness;
+	FGameplayTag Attributes_Resistance_Holy;
+	FGameplayTag Attributes_Resistance_Slash;
+	FGameplayTag Attributes_Resistance_Pierce;
+	FGameplayTag Attributes_Resistance_Blunt;
+
 	FGameplayTag InputTag_Move_Left;
 	FGameplayTag InputTag_Move_Right;
 	FGameplayTag InputTag_Up;
@@ -51,6 +61,18 @@ public:
 	FGameplayTag InputTag_Spell2;
 
 	FGameplayTag Damage;
+	FGameplayTag Damage_Element_Fire;
+	FGameplayTag Damage_Element_Lightning;
+	FGameplayTag Damage_Element_Cold;
+	FGameplayTag Damage_Element_Arcane;
+	FGameplayTag Damage_Element_Holy;
+	FGameplayTag Damage_Element_Darkness;
+	FGameplayTag Damage_Physical_Slash;
+	FGameplayTag Damage_Physical_Pierce;
+	FGameplayTag Damage_Physical_Blunt;
+
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
+
 	FGameplayTag Effects_HitReact;
 
 private:

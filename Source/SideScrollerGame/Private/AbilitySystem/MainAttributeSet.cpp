@@ -21,6 +21,8 @@ void UMainAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	// Primary Attributes
+
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Strength, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Dexterity, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
@@ -29,10 +31,14 @@ void UMainAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Wisdom, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Luck, COND_None, REPNOTIFY_Always);
 
+	// Secondary Attributes
+
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, PhysicalDamage, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, MagicDamage, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, AttackSpeed, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Armor, COND_None, REPNOTIFY_Always);
+
+	// Vital Attributes
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
@@ -40,6 +46,18 @@ void UMainAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
+
+	// Resistance Attributes
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, FireResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, ColdResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, HolyResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, DarknessResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, SlashResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, PierceResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMainAttributeSet, BluntResistance, COND_None, REPNOTIFY_Always);
 }
 
 void UMainAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -150,7 +168,7 @@ void UMainAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 	{
 		if (AMainPlayerController* PC = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
 		{
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bCriticalHit);
 		}
 	}
 }
@@ -238,5 +256,50 @@ void UMainAttributeSet::OnRep_AttackSpeed(const FGameplayAttributeData& OldAttac
 void UMainAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, Armor, OldArmor);
+}
+
+void UMainAttributeSet::OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, FireResistance, OldFireResistance);
+}
+
+void UMainAttributeSet::OnRep_LightningResistance(const FGameplayAttributeData& OldLightningResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, LightningResistance, OldLightningResistance);
+}
+
+void UMainAttributeSet::OnRep_ColdResistance(const FGameplayAttributeData& OldColdResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, ColdResistance, OldColdResistance);
+}
+
+void UMainAttributeSet::OnRep_ArcaneResistance(const FGameplayAttributeData& OldArcaneResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, ArcaneResistance, OldArcaneResistance);
+}
+
+void UMainAttributeSet::OnRep_HolyResistance(const FGameplayAttributeData& OldHolyResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, HolyResistance, OldHolyResistance);
+}
+
+void UMainAttributeSet::OnRep_DarknessResistance(const FGameplayAttributeData& OldDarknessResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, DarknessResistance, OldDarknessResistance);
+}
+
+void UMainAttributeSet::OnRep_SlashResistance(const FGameplayAttributeData& OldSlashResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, SlashResistance, OldSlashResistance);
+}
+
+void UMainAttributeSet::OnRep_PierceResistance(const FGameplayAttributeData& OldPierceResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, PierceResistance, OldPierceResistance);
+}
+
+void UMainAttributeSet::OnRep_BluntResistance(const FGameplayAttributeData& OldBluntResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMainAttributeSet, BluntResistance, OldBluntResistance);
 }
 
