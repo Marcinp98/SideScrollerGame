@@ -9,6 +9,8 @@
 #include "EnemyBase.generated.h"
 
 class UWidgetComponent;
+class UBehaviorTree;
+class AMainAIController;
 
 /**
  * 
@@ -19,6 +21,7 @@ class SIDESCROLLERGAME_API AEnemyBase : public ACharacterBase
 	GENERATED_BODY()
 public:
 	AEnemyBase();
+	virtual void PossessedBy(AController* NewController) override;
 
 	/* Combat Interface */
 	virtual int32 GetPlayerLevel() override;
@@ -56,5 +59,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
+	UPROPERTY(EditAnywhere, Category = "AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
 
+	UPROPERTY()
+	TObjectPtr<AMainAIController> MainAIController;
 };

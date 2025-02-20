@@ -9,6 +9,9 @@
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/MainUserWidget.h"
 #include "MainGameplayTags.h"
+#include "AI/MainAIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 AEnemyBase::AEnemyBase()
@@ -21,6 +24,16 @@ AEnemyBase::AEnemyBase()
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+}
+
+void AEnemyBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (!HasAuthority())	return;
+	MainAIController = Cast<AMainAIController>(NewController);
+	MainAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	MainAIController->RunBehaviorTree(BehaviorTree);
 }
 
 int32 AEnemyBase::GetPlayerLevel()
