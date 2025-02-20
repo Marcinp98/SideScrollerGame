@@ -67,7 +67,7 @@ void AMainPlayerController::SetupInputComponent()
 
 void AMainPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter, bool bCriticalHit)
 {
-    if (IsValid(TargetCharacter) && DamageTextComponentClass)
+    if (IsValid(TargetCharacter) && DamageTextComponentClass && IsLocalController())
     {
         UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
         DamageText->RegisterComponent();

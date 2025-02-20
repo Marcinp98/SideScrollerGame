@@ -10,12 +10,28 @@
 
 struct MainDamageStatics
 {
-	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(FireResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ColdResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ArcaneResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(HolyResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(DarknessResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(SlashResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(PierceResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(BluntResistance);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Luck);
 
 	MainDamageStatics()
 	{
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, Armor, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, FireResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, LightningResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, ColdResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, ArcaneResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, HolyResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, DarknessResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, SlashResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, PierceResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, BluntResistance, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UMainAttributeSet, Luck, Source, false);
 	}
 };
@@ -28,12 +44,36 @@ static const MainDamageStatics& DamageStatics()
 
 UExecCalc_Damage::UExecCalc_Damage()
 {
-	RelevantAttributesToCapture.Add(DamageStatics().ArmorDef);
 	RelevantAttributesToCapture.Add(DamageStatics().LuckDef);
+
+	RelevantAttributesToCapture.Add(DamageStatics().FireResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().LightningResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ColdResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ArcaneResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().HolyResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().DarknessResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().SlashResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().PierceResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().BluntResistanceDef);
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& outExecutionOutput) const
 {
+	TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition> TagsToCaptureDefs;
+	const FMainGameplayTags& Tags = FMainGameplayTags::Get();
+
+	TagsToCaptureDefs.Add(Tags.Attributes_Primary_Luck, DamageStatics().LuckDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Fire, DamageStatics().FireResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Lightning, DamageStatics().LightningResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Cold, DamageStatics().ColdResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Arcane, DamageStatics().ArcaneResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Holy, DamageStatics().HolyResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Darkness, DamageStatics().DarknessResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Slash, DamageStatics().SlashResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Pierce, DamageStatics().PierceResistanceDef);
+	TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Blunt, DamageStatics().BluntResistanceDef);
+
+
 	const UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
 	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
 
@@ -52,16 +92,21 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	float Damage = 0.f;
 	for (const TTuple<FGameplayTag, FGameplayTag>& Pair : FMainGameplayTags::Get().DamageTypesToResistances)
 	{
-		const float DamageTypeValue = Spec.GetSetByCallerMagnitude(Pair.Key);
+		const FGameplayTag DamageTypeTag = Pair.Key;
+		const FGameplayTag ResistanceTag = Pair.Value;
+
+		checkf(TagsToCaptureDefs.Contains(ResistanceTag), TEXT("TagsToCaptureDefs doesn't contain Tag: [%s] in ExecCalc_Damage"), *ResistanceTag.ToString());
+		const FGameplayEffectAttributeCaptureDefinition CaptureDef = TagsToCaptureDefs[ResistanceTag];
+		
+		float DamageTypeValue = Spec.GetSetByCallerMagnitude(Pair.Key);
+
+		float Resistance = 0.f;
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(CaptureDef, EvaluationParameters, Resistance);
+		Resistance = FMath::Clamp(Resistance, 0.f, 100.f);
+
+		DamageTypeValue *= (100.f - Resistance) / 100.f;
 		Damage += DamageTypeValue;
 	}
-	// Armor
-	float TargetArmor = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluationParameters, TargetArmor);
-	TargetArmor = FMath::Max<float>(TargetArmor, 0.f);
-
-	const float EffectiveArmor = TargetArmor;
-	Damage /= (1 + EffectiveArmor / 100.f);
 
 	//Critical hit chance (Luck)
 

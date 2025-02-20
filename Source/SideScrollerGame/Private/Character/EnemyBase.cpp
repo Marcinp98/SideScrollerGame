@@ -39,8 +39,11 @@ void AEnemyBase::BeginPlay()
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-	UMainAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
-	
+	if (HasAuthority())
+	{
+		UMainAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+	}
+
 	if (UMainUserWidget* MainUserWidget = Cast<UMainUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
 		MainUserWidget->SetWidgetController(this);
@@ -82,7 +85,10 @@ void AEnemyBase::InitAbilityActorInfo()
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UMainAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
-	InitializeDefaultAttributes();
+	if (HasAuthority())
+	{
+		InitializeDefaultAttributes();
+	}
 }
 
 void AEnemyBase::InitializeDefaultAttributes() const

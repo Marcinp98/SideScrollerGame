@@ -7,6 +7,8 @@
 #include "AbilitySystem/MainAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Character/EnemyBase.h"
+#include "Components/WidgetComponent.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -38,15 +40,24 @@ UAnimMontage* ACharacterBase::GetHitReactMontage_Implementation()
 
 void ACharacterBase::Die()
 {
-	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 	MulticastHandleDeath();
 }
 
 void ACharacterBase::MulticastHandleDeath_Implementation()
 {
+	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 	Weapon->SetSimulatePhysics(true);
 	Weapon->SetEnableGravity(true);
 	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+
+	if (HasAuthority())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Weapon physics enabled on SERVER"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Weapon physics enabled on CLIENT"));
+	}
 
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetEnableGravity(true);
@@ -55,6 +66,12 @@ void ACharacterBase::MulticastHandleDeath_Implementation()
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dissolve();
+
+	if (AEnemyBase* Enemy = Cast<AEnemyBase>(this))
+	{
+		Enemy->HealthBar->SetVisibility(false);
+		Enemy->HealthBar->DestroyComponent();
+	}
 }
 
 void ACharacterBase::BeginPlay()
