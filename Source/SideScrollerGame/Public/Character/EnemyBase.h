@@ -6,6 +6,7 @@
 #include "Character/CharacterBase.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
+#include "Interaction/EnemyInterface.h"
 #include "EnemyBase.generated.h"
 
 class UWidgetComponent;
@@ -16,7 +17,7 @@ class AMainAIController;
  * 
  */
 UCLASS()
-class SIDESCROLLERGAME_API AEnemyBase : public ACharacterBase
+class SIDESCROLLERGAME_API AEnemyBase : public ACharacterBase, public IEnemyInterface
 {
 	GENERATED_BODY()
 public:
@@ -26,6 +27,8 @@ public:
 	/* Combat Interface */
 	virtual int32 GetPlayerLevel() override;
 	virtual void Die() override;
+	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
+	virtual AActor* GetCombatTarget_Implementation() const override;
 	/* End Combat Interface */
 
 	UPROPERTY(BlueprintAssignable)
@@ -44,6 +47,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	float LifeSpan = 5.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;

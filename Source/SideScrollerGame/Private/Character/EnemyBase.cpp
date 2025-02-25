@@ -49,6 +49,16 @@ void AEnemyBase::Die()
 	Super::Die();
 }
 
+void AEnemyBase::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* AEnemyBase::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
+}
+
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
