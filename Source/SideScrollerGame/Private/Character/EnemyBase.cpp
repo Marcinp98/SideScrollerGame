@@ -34,6 +34,8 @@ void AEnemyBase::PossessedBy(AController* NewController)
 	MainAIController = Cast<AMainAIController>(NewController);
 	MainAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 	MainAIController->RunBehaviorTree(BehaviorTree);
+	MainAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
+	MainAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
 }
 
 int32 AEnemyBase::GetPlayerLevel()
@@ -54,7 +56,7 @@ void AEnemyBase::BeginPlay()
 	InitAbilityActorInfo();
 	if (HasAuthority())
 	{
-		UMainAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+		UMainAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent, CharacterClass);
 	}
 
 	if (UMainUserWidget* MainUserWidget = Cast<UMainUserWidget>(HealthBar->GetUserWidgetObject()))
@@ -91,6 +93,7 @@ void AEnemyBase::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCou
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+	MainAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
 }
 
 void AEnemyBase::InitAbilityActorInfo()

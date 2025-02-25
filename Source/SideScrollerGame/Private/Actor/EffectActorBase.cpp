@@ -45,6 +45,8 @@ void AEffectActorBase::OnEffectBeginOverlap(AActor* TargetActor)
 	UAbilitySystemComponent* TargetAbility = AbilityInterface->GetAbilitySystemComponent();
 	if (!TargetAbility) return;
 
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectsToEnemies) return;
+
 	bool bApplied = false;
 
 	for (const auto& Effect : AppliesGameplayEffects)
@@ -67,6 +69,8 @@ void AEffectActorBase::OnEffectEndOverlap(AActor* TargetActor)
 
 	UAbilitySystemComponent* TargetAbility = AbilityInterface->GetAbilitySystemComponent();
 	if (!TargetAbility) return;
+
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectsToEnemies) return;
 
 	TArray<FActiveEffectHandle> ToRemove;
 	ActiveEffectHandles.MultiFind(TargetAbility, ToRemove);

@@ -75,6 +75,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameplayEffect")
 	TArray<FAppliesGameplayEffect> AppliesGameplayEffects;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameplayEffect")
+	bool bApplyEffectsToEnemies = false;
+
 	TMultiMap<UAbilitySystemComponent*, FActiveEffectHandle> ActiveEffectHandles;
 
 	void ApplyGameplayEffect(UAbilitySystemComponent* TargetAbility, const FAppliesGameplayEffect& Effect, bool& bApplied);

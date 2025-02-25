@@ -9,6 +9,7 @@
 #include "Game/MainGameModeBase.h"
 #include "AbilitySystemComponent.h"
 #include "MainAbilityTypes.h"
+#include "Interaction/CombatInterface.h"
 
 UOverlayWidgetController* UMainAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
 {
@@ -65,13 +66,24 @@ void UMainAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* World
     ASC->ApplyGameplayEffectSpecToSelf(*VitalAttributesSpecHandle.Data.Get());
 }
 
-void UMainAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+void UMainAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, ECharacterClass CharacterClass)
 {
     UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+    if (CharacterClassInfo == nullptr) return;
     for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
     {
         FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
         ASC->GiveAbility(AbilitySpec);
+    }
+    const FCharacterClassDefaultInfo& DefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+    for (TSubclassOf<UGameplayAbility> AbilityClass : DefaultInfo.StartupAbilities)
+    {
+        ICombatInterface* CombatInterface = Cast<ICombatInterface>(ASC->GetAvatarActor());
+        if (CombatInterface)
+        {
+            FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, CombatInterface->GetPlayerLevel());
+            ASC->GiveAbility(AbilitySpec);
+        }
     }
 }
 

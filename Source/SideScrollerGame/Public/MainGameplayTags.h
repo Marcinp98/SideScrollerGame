@@ -71,6 +71,8 @@ public:
 	FGameplayTag Damage_Physical_Pierce;
 	FGameplayTag Damage_Physical_Blunt;
 
+	FGameplayTag Abilities_Attack;
+
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 
 	FGameplayTag Effects_HitReact;
