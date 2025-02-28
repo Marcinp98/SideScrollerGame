@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Character/EnemyBase.h"
 #include "Components/WidgetComponent.h"
+#include "MainGameplayTags.h"
 
 ACharacterBase::ACharacterBase()
 {
@@ -50,15 +51,6 @@ void ACharacterBase::MulticastHandleDeath_Implementation()
 	Weapon->SetEnableGravity(true);
 	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 
-	if (HasAuthority())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Weapon physics enabled on SERVER"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Weapon physics enabled on CLIENT"));
-	}
-
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetEnableGravity(true);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
@@ -66,6 +58,7 @@ void ACharacterBase::MulticastHandleDeath_Implementation()
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dissolve();
+	bDead = true;
 
 	if (AEnemyBase* Enemy = Cast<AEnemyBase>(this))
 	{
@@ -84,15 +77,37 @@ void ACharacterBase::InitAbilityActorInfo()
 {
 }
 
-FVector ACharacterBase::GetCombatSocketLocation()
+FVector ACharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
 {
-	check(Weapon);
-	return Weapon->GetSocketLocation(WeaponTipSocketName);
+	const FMainGameplayTags& GameplayTags = FMainGameplayTags::Get();
+	if (MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon) && IsValid(Weapon))
+	{
+		return Weapon->GetSocketLocation(WeaponTipSocketName);
+	}
+	if (MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftHand))
+	{
+		return GetMesh()->GetSocketLocation(LeftHandSocketName);
+	}
+	if (MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_RightHand))
+	{
+		return GetMesh()->GetSocketLocation(RightHandSocketName);
+	}
+	return FVector();
 }
 
-FVector ACharacterBase::GetHandSocketLocation()
+bool ACharacterBase::IsDead_Implementation() const
 {
-	return GetMesh()->GetSocketLocation(HandSocket);
+	return bDead;
+}
+
+AActor* ACharacterBase::GetAvatar_Implementation()
+{
+	return this;
+}
+
+TArray<FTaggedMontage> ACharacterBase::GetAttackMontages_Implementation()
+{
+	return AttackMontages;
 }
 
 void ACharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level) const
