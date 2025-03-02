@@ -13,12 +13,12 @@ void UBaseProjectileAbility::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UBaseProjectileAbility::SpawnProjectile()
+void UBaseProjectileAbility::SpawnProjectile(const FGameplayTag& SocketTag)
 {
 	const bool bIsServer = (GetAvatarActorFromActorInfo()->HasAuthority());
 	if (!bIsServer) return;
 
-	FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo(), FMainGameplayTags::Get().Montage_Attack_LeftHand);
+	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo(), SocketTag);
 	const FRotator ActorRotation = GetAvatarActorFromActorInfo()->GetActorRotation();
 
 	FTransform SpawnTransform;
