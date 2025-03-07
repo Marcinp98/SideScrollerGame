@@ -13,17 +13,28 @@ void UBaseProjectileAbility::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UBaseProjectileAbility::SpawnProjectile(const FGameplayTag& SocketTag)
+void UBaseProjectileAbility::SpawnProjectile(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag)
 {
 	const bool bIsServer = (GetAvatarActorFromActorInfo()->HasAuthority());
 	if (!bIsServer) return;
 
 	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo(), SocketTag);
-	const FRotator ActorRotation = GetAvatarActorFromActorInfo()->GetActorRotation();
+	FRotator Rotation;
+
+	if (!ProjectileTargetLocation.IsNearlyZero())
+	{
+		// Jeœli cel jest ustawiony, obracamy pocisk w jego kierunku
+		Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+	}
+	else
+	{
+		// Jeœli nie ma celu, pocisk leci prosto przed siebie (zgodnie z orientacj¹ postaci)
+		Rotation = GetAvatarActorFromActorInfo()->GetActorRotation();
+	}
 
 	FTransform SpawnTransform;
 	SpawnTransform.SetLocation(SocketLocation);
-	SpawnTransform.SetRotation(ActorRotation.Quaternion());
+	SpawnTransform.SetRotation(Rotation.Quaternion());
 
 	ABaseProjectile* Projectile = GetWorld()->SpawnActorDeferred<ABaseProjectile>(
 		ProjectileClass,
