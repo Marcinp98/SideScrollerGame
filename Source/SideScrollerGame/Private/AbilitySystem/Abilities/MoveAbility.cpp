@@ -25,11 +25,11 @@ void UMoveAbility::ActivateAbility(
     // Pobranie wartoœci wejœcia (np. -1 dla lewo, 1 dla prawo)
     const float InputValue = 1.f; // Domyœlnie prawo
 
-    if (StartupInputTag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("InputTag.Move.Left"))))
+    if (StartupInputTag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("InputTag.Left"))))
     {
         MoveDirection = -1.f;
     }
-    else if (StartupInputTag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("InputTag.Move.Right"))))
+    else if (StartupInputTag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("InputTag.Right"))))
     {
         MoveDirection = 1.f;
     }

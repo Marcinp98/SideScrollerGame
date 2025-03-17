@@ -54,15 +54,15 @@ public:
 
 	/* Input Attributes */
 
-	FGameplayTag InputTag_Move_Left;
-	FGameplayTag InputTag_Move_Right;
+	FGameplayTag InputTag_Left;
+	FGameplayTag InputTag_Right;
 	FGameplayTag InputTag_Up;
 	FGameplayTag InputTag_Down;
-	FGameplayTag InputTag_Jump;
-	FGameplayTag InputTag_Attack;
-	FGameplayTag InputTag_Interaction;
-	FGameplayTag InputTag_Spell1;
-	FGameplayTag InputTag_Spell2;
+	FGameplayTag InputTag_Z;
+	FGameplayTag InputTag_X;
+	FGameplayTag InputTag_C;
+	FGameplayTag InputTag_A;
+	FGameplayTag InputTag_S;
 
 	/* Damage Types */
 
