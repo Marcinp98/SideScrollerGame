@@ -52,6 +52,8 @@ public:
 	FGameplayTag Attributes_Resistance_Pierce;
 	FGameplayTag Attributes_Resistance_Blunt;
 
+	FGameplayTag Attributes_Meta_IncomingXP;
+
 	/* Input Attributes */
 
 	FGameplayTag InputTag_Left;

@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Character/CharacterBase.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
-#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Interaction/EnemyInterface.h"
 #include "EnemyBase.generated.h"
 
@@ -61,9 +60,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	int32 Level = 1;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
-	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	TObjectPtr<UBehaviorTree> BehaviorTree;
